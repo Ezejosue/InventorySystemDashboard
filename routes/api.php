@@ -13,7 +13,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('/users', [UserController::class, 'create']);
     Route::get('/users/{email}', [UserController::class, 'getByEmail']);
     Route::put('/users/{id}', [UserController::class, 'update']);
-    Route::put('/users/{id}', [UserController::class, 'delete']);
+    Route::delete('/users/{id}', [UserController::class, 'delete']);
 
 
 
