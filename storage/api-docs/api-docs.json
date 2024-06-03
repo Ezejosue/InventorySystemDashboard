@@ -312,6 +312,217 @@
                 }
             }
         },
+        "/api/products": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get all products",
+                "description": "Returns a list of all products",
+                "operationId": "getAllProducts",
+                "responses": {
+                    "200": {
+                        "description": "A list of products",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ProductListDTO"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Update product stock",
+                "description": "Updates the stock quantity of a product",
+                "operationId": "updateStock",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "productID": {
+                                        "description": "The ID of the product",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "newQuantity": {
+                                        "description": "The new quantity of the product",
+                                        "type": "integer",
+                                        "example": 100
+                                    },
+                                    "movementType": {
+                                        "description": "The type of stock movement",
+                                        "type": "string",
+                                        "example": "entry or exit"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Stock updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Stock updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Add a new product",
+                "description": "Creates a new product in the database",
+                "operationId": "storeProduct",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Product"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product added successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "example": "Invalid input"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/products/{productName}": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Get product by name",
+                "description": "Returns a product by its name",
+                "operationId": "getProductByName",
+                "parameters": [
+                    {
+                        "name": "productName",
+                        "in": "path",
+                        "description": "The name of the product",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Product found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ProductListDTO"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Product not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/users": {
             "get": {
                 "tags": [
@@ -510,6 +721,49 @@
     },
     "components": {
         "schemas": {
+            "ProductListDTO": {
+                "title": "Product List DTO",
+                "description": "Data transfer object for listing products",
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the product",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "The name of the product",
+                        "type": "string",
+                        "example": "Sample Product"
+                    },
+                    "description": {
+                        "description": "The description of the product",
+                        "type": "string",
+                        "example": "This is a sample product"
+                    },
+                    "price": {
+                        "description": "The price of the product",
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "stock": {
+                        "description": "The stock quantity of the product",
+                        "type": "integer",
+                        "example": 50
+                    },
+                    "category_name": {
+                        "description": "The name of the category",
+                        "type": "string",
+                        "example": "Electronics"
+                    },
+                    "supplier_name": {
+                        "description": "The name of the supplier",
+                        "type": "string",
+                        "example": "Supplier Inc."
+                    }
+                },
+                "type": "object"
+            },
             "Category": {
                 "title": "Category",
                 "description": "Category model",
@@ -530,6 +784,51 @@
                     "description": {
                         "description": "Description of the category",
                         "type": "string"
+                    }
+                },
+                "type": "object"
+            },
+            "Product": {
+                "title": "Product",
+                "description": "Product model",
+                "required": [
+                    "name",
+                    "price",
+                    "stock",
+                    "category_id",
+                    "supplier_id"
+                ],
+                "properties": {
+                    "name": {
+                        "description": "The name of the product",
+                        "type": "string",
+                        "example": "Sample Product"
+                    },
+                    "description": {
+                        "description": "The description of the product",
+                        "type": "string",
+                        "example": "This is a sample product"
+                    },
+                    "price": {
+                        "description": "The price of the product",
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "stock": {
+                        "description": "The stock quantity of the product",
+                        "type": "integer",
+                        "example": 50
+                    },
+                    "category_id": {
+                        "description": "The category ID of the product",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "supplier_id": {
+                        "description": "The supplier ID of the product",
+                        "type": "integer",
+                        "example": 3
                     }
                 },
                 "type": "object"
