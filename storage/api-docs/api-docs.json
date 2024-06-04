@@ -312,6 +312,181 @@
                 }
             }
         },
+        "/api/clients": {
+            "get": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Get all clients",
+                "description": "Returns a list of all clients",
+                "operationId": "getAllClients",
+                "responses": {
+                    "200": {
+                        "description": "A list of clients",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Client"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Create a new client",
+                "description": "Stores a new client in the database",
+                "operationId": "storeClient",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Client"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Client added successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client added successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/clients/{username}": {
+            "get": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Get a client by username",
+                "description": "Returns a single client by username",
+                "operationId": "getClientByUsername",
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "path",
+                        "description": "The username of the client",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Client found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Client"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/clients/{id}": {
+            "put": {
+                "tags": [
+                    "Clients"
+                ],
+                "summary": "Update a client",
+                "description": "Updates an existing client in the database",
+                "operationId": "updateClient",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the client",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Client"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Client updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Client not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/api/products": {
             "get": {
                 "tags": [
@@ -513,6 +688,276 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Product not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sales": {
+            "get": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Get all sales",
+                "description": "Returns a list of all sales",
+                "operationId": "getAllSales",
+                "responses": {
+                    "200": {
+                        "description": "A list of sales",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Sale"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Register a new sale",
+                "description": "Registers a new sale in the database",
+                "operationId": "registerSale",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_id",
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "client_id": {
+                                        "description": "The ID of the client making the purchase",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "product_id": {
+                                        "description": "The ID of the product being purchased",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "quantity": {
+                                        "description": "The quantity of the product being purchased",
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sale registered successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale registered successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/sales/{id}": {
+            "get": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Get a sale by ID",
+                "description": "Returns a single sale by ID",
+                "operationId": "getSaleById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the sale",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sale found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Sale"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Update a sale",
+                "description": "Updates an existing sale in the database",
+                "operationId": "updateSale",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the sale",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_id",
+                                    "product_id",
+                                    "quantity"
+                                ],
+                                "properties": {
+                                    "client_id": {
+                                        "description": "The ID of the client making the purchase",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "product_id": {
+                                        "description": "The ID of the product being purchased",
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "quantity": {
+                                        "description": "The quantity of the product being purchased",
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Sale updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale updated successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Sales"
+                ],
+                "summary": "Delete a sale",
+                "description": "Deletes a sale from the database",
+                "operationId": "deleteSale",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The ID of the sale",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sale deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale deleted successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Sale not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sale not found"
                                         }
                                     },
                                     "type": "object"
@@ -989,6 +1434,51 @@
                 },
                 "type": "object"
             },
+            "Client": {
+                "title": "Client",
+                "description": "Client model",
+                "required": [
+                    "username",
+                    "password",
+                    "email",
+                    "name",
+                    "phone"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the client",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "username": {
+                        "description": "The username of the client",
+                        "type": "string",
+                        "example": "john_doe"
+                    },
+                    "password": {
+                        "description": "The password of the client",
+                        "type": "string",
+                        "writeOnly": true,
+                        "example": "password123"
+                    },
+                    "email": {
+                        "description": "The email address of the client",
+                        "type": "string",
+                        "example": "john_doe@example.com"
+                    },
+                    "name": {
+                        "description": "The full name of the client",
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "phone": {
+                        "description": "The phone number of the client",
+                        "type": "string",
+                        "example": "123-456-7890"
+                    }
+                },
+                "type": "object"
+            },
             "Product": {
                 "title": "Product",
                 "description": "Product model",
@@ -1030,6 +1520,52 @@
                         "description": "The supplier ID of the product",
                         "type": "integer",
                         "example": 3
+                    }
+                },
+                "type": "object"
+            },
+            "Sale": {
+                "title": "Sale",
+                "description": "Sale model",
+                "required": [
+                    "client_id",
+                    "product_id",
+                    "quantity",
+                    "total_price",
+                    "date"
+                ],
+                "properties": {
+                    "id": {
+                        "description": "The unique identifier of the sale",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "client_id": {
+                        "description": "The ID of the client associated with the sale",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "product_id": {
+                        "description": "The ID of the product associated with the sale",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "quantity": {
+                        "description": "The quantity of the product sold",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "total_price": {
+                        "description": "The total price of the sale",
+                        "type": "number",
+                        "format": "float",
+                        "example": 99.99
+                    },
+                    "date": {
+                        "description": "The date and time of the sale",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-06-04T12:34:56Z"
                     }
                 },
                 "type": "object"

@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SuppliersController;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\SaleController;
 
 Route::middleware(['api'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -33,4 +35,15 @@ Route::middleware(['api'])->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
     Route::get('/products/{productName}', [ProductController::class, 'getProductByName']);
     Route::put('/products', [ProductController::class, 'updateStock']);
+
+    Route::get('/clients', [ClientController::class, 'getAllClients']);
+    Route::post('/clients', [ClientController::class, 'store']);
+    Route::get('/clients/{username}', [ClientController::class, 'getClientByUsername']);
+    Route::put('/clients/{id}', [ClientController::class, 'updateClient']);
+
+    Route::get('/sales', [SaleController::class, 'getAllSales']);
+    Route::post('/sales', [SaleController::class, 'registerSale']);
+    Route::get('/sales/{id}', [SaleController::class, 'getSaleById']);
+    Route::put('/sales/{id}', [SaleController::class, 'updateSale']);
+    Route::delete('/sales/{id}', [SaleController::class, 'deleteSale']);
 });
