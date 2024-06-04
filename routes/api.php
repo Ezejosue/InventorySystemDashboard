@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SuppliersController;
 
 Route::middleware(['api'])->group(function () {
     Route::post('/login', [AuthController::class, 'login']);
@@ -21,6 +22,12 @@ Route::middleware(['api'])->group(function () {
     Route::get('/categories/{id}', [CategoriesController::class, 'show']);
     Route::put('/categories/{id}', [CategoriesController::class, 'update']);
     Route::delete('/categories/{id}', [CategoriesController::class, 'destroy']);
+
+    Route::get('/suppliers', [SuppliersController::class, 'index']);
+    Route::post('/suppliers', [SuppliersController::class, 'store']);
+    Route::get('/suppliers/{id}', [SuppliersController::class, 'show']);
+    Route::put('/suppliers/{id}', [SuppliersController::class, 'update']);
+    Route::delete('/suppliers/{id}', [SuppliersController::class, 'destroy']);
 
     Route::get('/products', [ProductController::class, 'getAll']);
     Route::post('/products', [ProductController::class, 'store']);
