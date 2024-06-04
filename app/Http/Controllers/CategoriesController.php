@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\CategoriesService;
-use App\DTOs\CategoriesDTO;
+use App\Services\ClientsService;
+use App\Models\Client;
 use Illuminate\Http\Request;
 
 /**
@@ -12,32 +12,35 @@ use Illuminate\Http\Request;
  *     version="1.0.0",
  * )
  */
-class CategoriesController extends Controller
+class ClientsController extends Controller
 {
-    protected $categoriesService;
+    protected $clientsService;
 
-    public function __construct(CategoriesService $categoriesService)
+    public function __construct(ClientsService $clientsService)
     {
-        $this->categoriesService = $categoriesService;
+        $this->clientsService = $clientsService;
     }
 
     /**
      * @OA\Post(
-     *     path="/api/categories",
-     *     summary="Create a new category",
-     *     tags={"Categories"},
+     *     path="/api/clients",
+     *     summary="Create a new client",
+     *     tags={"Clients"},
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name", "description"},
-     *             @OA\Property(property="name", type="string", example="Electronics"),
-     *             @OA\Property(property="description", type="string", example="Category for electronic items")
+     *             required={"username", "password", "email", "name", "phone"},
+     *             @OA\Property(property="username", type="string", example="johndoe"),
+     *             @OA\Property(property="password", type="string", example="password123"),
+     *             @OA\Property(property="email", type="string", example="johndoe@example.com"),
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="phone", type="string", example="1234567890")
      *         )
      *     ),
      *     @OA\Response(
      *         response=201,
-     *         description="Category created successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Category")
+     *         description="Client created successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/Client")
      *     ),
      *     @OA\Response(
      *         response=400,
@@ -47,27 +50,21 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $categoriesDTO = new CategoriesDTO(
-            $request->input('name'),
-            $request->input('description')
-        );
-
-        $category = $this->categoriesService->createCategory($categoriesDTO);
-
-        return response()->json($category, 201);
+        $client = $this->clientsService->createClient($request->all());
+        return response()->json($client, 201);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/categories",
-     *     summary="Get all categories",
-     *     tags={"Categories"},
+     *     path="/api/clients",
+     *     summary="Get all clients",
+     *     tags={"Clients"},
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
      *         @OA\JsonContent(
      *             type="array",
-     *             @OA\Items(ref="#/components/schemas/Category")
+     *             @OA\Items(ref="#/components/schemas/Client")
      *         ),
      *     ),
      *     @OA\Response(
@@ -78,19 +75,19 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        $categories = $this->categoriesService->getAllCategories();
-        return response()->json($categories);
+        $clients = $this->clientsService->getAllClients();
+        return response()->json($clients);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/categories/{id}",
-     *     summary="Get a category by ID",
-     *     tags={"Categories"},
+     *     path="/api/clients/{id}",
+     *     summary="Get a client by ID",
+     *     tags={"Clients"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID of the category",
+     *         description="ID of the client",
      *         required=true,
      *         @OA\Schema(
      *             type="integer"
@@ -99,7 +96,7 @@ class CategoriesController extends Controller
      *     @OA\Response(
      *         response=200,
      *         description="Successful operation",
-     *         @OA\JsonContent(ref="#/components/schemas/Category")
+     *         @OA\JsonContent(ref="#/components/schemas/Client")
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -109,19 +106,19 @@ class CategoriesController extends Controller
      */
     public function show($id)
     {
-        $category = $this->categoriesService->getCategoryById($id);
-        return response()->json($category);
+        $client = $this->clientsService->getClientById($id);
+        return response()->json($client);
     }
 
     /**
      * @OA\Put(
-     *     path="/api/categories/{id}",
-     *     summary="Update an existing category",
-     *     tags={"Categories"},
+     *     path="/api/clients/{id}",
+     *     summary="Update an existing client",
+     *     tags={"Clients"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID of the category to update",
+     *         description="ID of the client to update",
      *         required=true,
      *         @OA\Schema(
      *             type="integer"
@@ -130,15 +127,18 @@ class CategoriesController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"name", "description"},
-     *             @OA\Property(property="name", type="string", example="Electronics"),
-     *             @OA\Property(property="description", type="string", example="Updated category for electronic items")
+     *             required={"username", "password", "email", "name", "phone"},
+     *             @OA\Property(property="username", type="string", example="johndoe"),
+     *             @OA\Property(property="password", type="string", example="password123"),
+     *             @OA\Property(property="email", type="string", example="johndoe@example.com"),
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="phone", type="string", example="1234567890")
      *         )
      *     ),
      *     @OA\Response(
      *         response=200,
-     *         description="Category updated successfully",
-     *         @OA\JsonContent(ref="#/components/schemas/Category")
+     *         description="Client updated successfully",
+     *         @OA\JsonContent(ref="#/components/schemas/Client")
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -146,27 +146,21 @@ class CategoriesController extends Controller
      *     )
      * )
      */
-    public function update($id, Request $request)
+    public function update(Request $request, Client $client)
     {
-        $categoriesDTO = new CategoriesDTO(
-            $request->input('name'),
-            $request->input('description')
-        );
-
-        $category = $this->categoriesService->updateCategory($id, $categoriesDTO);
-
-        return response()->json($category);
+        $this->clientsService->updateClient($client, $request->all());
+        return response()->json($client);
     }
 
     /**
      * @OA\Delete(
-     *     path="/api/categories/{id}",
-     *     summary="Delete a category",
-     *     tags={"Categories"},
+     *     path="/api/clients/{id}",
+     *     summary="Delete a client",
+     *     tags={"Clients"},
      *     @OA\Parameter(
      *         name="id",
      *         in="path",
-     *         description="ID of the category to delete",
+     *         description="ID of the client to delete",
      *         required=true,
      *         @OA\Schema(
      *             type="integer"
@@ -174,7 +168,7 @@ class CategoriesController extends Controller
      *     ),
      *     @OA\Response(
      *         response=204,
-     *         description="Category deleted successfully"
+     *         description="Client deleted successfully"
      *     ),
      *     @OA\Response(
      *         response=404,
@@ -182,10 +176,9 @@ class CategoriesController extends Controller
      *     )
      * )
      */
-    public function destroy($id)
+    public function destroy(Client $client)
     {
-        $this->categoriesService->deleteCategory($id);
-
+        $this->clientsService->deleteClient($client);
         return response()->json(null, 204);
     }
 }
