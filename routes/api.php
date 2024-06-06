@@ -36,6 +36,7 @@ Route::middleware(['api'])->group(function () {
     Route::post('/products', [ProductController::class, 'store']);
     Route::get('/products/{productName}', [ProductController::class, 'getProductByName']);
     Route::put('/products', [ProductController::class, 'updateStock']);
+    Route::put('/products/{id}', [ProductController::class, 'updateProduct']);
 
     Route::get('/clients', [ClientController::class, 'getAllClients']);
     Route::post('/clients', [ClientController::class, 'store']);

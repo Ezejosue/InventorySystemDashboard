@@ -220,4 +220,64 @@ class ProductController extends Controller
 
         return response()->json(['message' => 'Stock updated successfully']);
     }
+
+    /**
+     * @OA\Put(
+     *     path="/api/products/{id}",
+     *     summary="Update a product",
+     *     tags={"Products"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID of the product to update",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "description", "price", "stock", "category_id", "supplier_id"},
+     *             @OA\Property(property="name", type="string", example="Product Name"),
+     *             @OA\Property(property="description", type="string", example="Product Description"),
+     *             @OA\Property(property="price", type="number", format="float", example=10.5),
+     *             @OA\Property(property="stock", type="integer", example=100),
+     *             @OA\Property(property="category_id", type="integer", example=1),
+     *             @OA\Property(property="supplier_id", type="integer", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product updated successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product updated successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Product not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Product not found")
+     *         )
+     *     )
+     * )
+     */
+    public function updateProduct(Request $request, $id)
+    {
+        $productDTO = new ProductDTO(
+            $request->input('name'),
+            $request->input('description'),
+            $request->input('price'),
+            $request->input('stock'),
+            $request->input('category_id'),
+            $request->input('supplier_id')
+        );
+
+        $product = $this->productService->updateProduct($id, $productDTO);
+
+        if ($product) {
+            return response()->json(['message' => 'Product updated successfully']);
+        } else {
+            return response()->json(['message' => 'Product not found'], 404);
+        }
+    }
 }

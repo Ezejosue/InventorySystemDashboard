@@ -34,4 +34,9 @@ class ProductService
     {
         return $this->productRepository->updateStock($updateStockDTO);
     }
+
+    public function updateProduct(int $id, ProductDTO $productDTO)
+    {
+        return $this->productRepository->updateProduct($id, $productDTO);
+    }
 }

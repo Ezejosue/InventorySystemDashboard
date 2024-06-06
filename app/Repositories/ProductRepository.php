@@ -69,4 +69,20 @@ class ProductRepository implements ProductRepositoryInterface
             $updateStockDTO->movementType
         ]);
     }
+
+    public function updateProduct(int $id, ProductDTO $productDTO)
+    {
+        $product = Products::find($id);
+        if ($product) {
+            $product->name = $productDTO->name;
+            $product->description = $productDTO->description;
+            $product->price = $productDTO->price;
+            $product->stock = $productDTO->stock;
+            $product->category_id = $productDTO->category_id;
+            $product->supplier_id = $productDTO->supplier_id;
+            $product->save();
+        }
+
+        return $product;
+    }
 }

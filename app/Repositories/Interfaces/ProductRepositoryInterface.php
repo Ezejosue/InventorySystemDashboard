@@ -11,4 +11,5 @@ interface ProductRepositoryInterface
     public function getProductByName($productName);
     public function addProduct(ProductDTO $productDTO);
     public function updateStock(UpdateStockDTO $updateStockDTO);
+    public function updateProduct(int $id, ProductDTO $productDTO);
 }
